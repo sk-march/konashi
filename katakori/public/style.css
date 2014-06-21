@@ -2,8 +2,8 @@
 	font-family: 'icomoon';
 	src:url('http://jsrun.it/assets/s/m/w/y/smwyM');
 	src:url('http://jsrun.it/assets/s/m/w/y/smwyM?#iefix') format('embedded-opentype'),
-		url('http://jsrun.it/assets/k/y/D/Z/kyDZo') format('woff'),
-		url('http://jsrun.it/assets/a/D/a/t/aDati') format('truetype'),
+		url('./kyDZo') format('woff'),
+		url('./aDati') format('truetype'),
 		url('http://jsrun.it/assets/x/Q/J/L/xQJL1#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
