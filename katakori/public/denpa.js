@@ -13,6 +13,7 @@ $(function(){
     });
 });
 
+/* 画面制御 */
 function showFirst(){
     $("#content").animate(
         {left: "0%"},
@@ -34,6 +35,8 @@ function showMeter(){
     );
 }
 
+/* 強度表示の変更*/
+
 function changeMeter(value){
     $("#meter").animate(
         {height: value + "%"},
@@ -49,20 +52,22 @@ function changeMeter(value){
 
 var intervalId;
 
-k.ready(function(){
+k.ready(function () {
     showMeter();
     k.pinModeAll(254);
 
-    intervalId = window.setInterval(function(){
+    intervalId = window.setInterval(function () {
         k.signalStrengthReadRequest();
     }, 1000);
 });
 
-k.on(k. KONASHI_EVENT_CONNECTED, function(){
+/* konashiに接続した時 */
+k.on(k.KONASHI_EVENT_CONNECTED, function () {
     showConnecting();
 });
 
-k.updateSignalStrength(function(data){
+/* 電波強度取得完了イベント */
+k.updateSignalStrength(function (data) {
     RSSI = -1 * data;    // 追加
     changeMeter(RSSI);   // 追加
     if(RSSI<75){                    // 追加
