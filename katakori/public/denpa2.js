@@ -41,7 +41,7 @@ $(function () {
         k.find();
     });
 
-    // develop
+   // develop
     if (mode === 'develop') {
         $("#button").on('click', function () {
             showConnecting();
@@ -67,6 +67,18 @@ $(function () {
         returnVideo();
         cnt = 0;
     });
+
+    // 低周波マッサージ機をon
+    $('#onBtn').on('tap click', function () {
+        switchOn();
+    });
+
+    // 低周波マッサージ機をoff
+    $('#offBtn').on('tap click', function () {
+        switchOff();
+    });
+
+
 
 });
 
@@ -138,16 +150,47 @@ function changeMeter(value) {
 }
 
 /* 低周波装置 */
+var panasonicMode = "off";
+var timeoutId;
 function sleep_func(time, callback) {
-    setTimeout(callback, time);
+    return setTimeout(callback, time);
 }
 function switchOn() {
-    // 0.5秒だけonにする。
-    k.digitalWrite(k.PIO0, k.HIGH);
-    sleep_func(500, function() {
-        k.digitalWrite(k.PIO0, k.LOW0);
-    });
+    if(panasonicMode=="off"){
+        panasonicMode="on";
+        // 0.5秒だけonにする。
+        k.digitalWrite(k.PIO1, k.HIGH);
+        sleep_func(500, function() {
+            k.digitalWrite(k.PIO1, k.LOW);
+            panasonicMode="on ok";
+        });
+        // 16分だけLEDつける
+        k.digitalWrite(k.PIO2, k.HIGH);
+        timeoutId = sleep_func(16*60*1000, function() {
+            k.digitalWrite(k.PIO2, k.LOW);
+            timeoutId=0;
+            panasonicMode="off";
+        });
+    }
 }
+function switchOff() {
+    if(panasonicMode=="on ok"){
+        panasonicMode="off try";
+        // 1.5秒だけonにする。
+        k.digitalWrite(k.PIO1, k.HIGH);
+        sleep_func(1600, function() {
+            k.digitalWrite(k.PIO1, k.LOW);
+            if(timeoutId!=0){
+                clearTimeout(timeoutId);
+                timeoutId=0;
+            }
+            panasonicMode="off";
+        });
+        // PIO3をOFF
+        k.digitalWrite(k.PIO2, k.LOW);
+    }
+}
+
 
 /////////////////////////////////////
 // konashi functions
@@ -161,28 +204,31 @@ k.ready(function () {
 
     //showPio();
 
-    k.i2cMode(k.KONASHI_I2C_ENABLE_400K);
+//    k.i2cMode(k.KONASHI_I2C_ENABLE_400K);
 
     // set analog pin mode
-    k.pinMode(k.PIO0, k.OUTPUT); // リレー用
+    k.pinMode(k.PIO1, k.OUTPUT); // リレー用
+    k.pinMode(k.PIO2, k.OUTPUT); // LED用
+    k.pinMode(k.PIO3, k.INPUT);  // 確認用
 
     //Initialize
-    k.i2cRestartCondition();
-    alert("a1");
-    var address = 0x4c;
+//    k.i2cRestartCondition();
+//    alert("a1");
+//    var address = 0x4c;
     //var length = KONASHI_I2C_DATA_MAX_LENGTH;
 
-    alert("a2");
+//    alert("a2");
 
     intervalId = window.setInterval(function () {
         //k.signalStrengthReadRequest();
         //alert("zzz");
-        try {
+/*        try {
             k.i2cReadRequest(10, address);
             //k.i2cStartCondition();
         } catch (e) {
             alert(e);
         }
+*/
         // yamasaki add
         k.analogReadRequest(k.AIO0); // x軸
         k.analogReadRequest(k.AIO1); // y軸
@@ -195,14 +241,14 @@ k.ready(function () {
 k.on(k.KONASHI_EVENT_CONNECTED, function () {
     showConnecting();
 });
-
+/*
 k.on(k.KONASHI_EVENT_I2C_READ_COMPLETE, function () {
     alert("aaa");
 });
 k.completeReadI2c(function (data) {
     alert("bbb" + data);
 });
-
+*/
 // yamasaki add start
 // get analog value
 var ax=0;
@@ -246,16 +292,27 @@ function checkKubifuri() {
     }
 }
 
+// digital 確認用
+k.updatePioInput( function(data) {
+    k.digitalRead(k.PIO1, function(data) {
+        if(data==0){
+            $('#minCnt').text("OFF");
+        }else{
+            $('#minCnt').text("ON");
+        }
+    });
+});
+
 // アナログ読み込み関数
-k.updateAnalogValueAio0(function(data){
+k.updateAnalogValueAio0( function(data) {
     // AIO0のアナログ値が取得できたら実行されます
     ax = data;
 });
-k.updateAnalogValueAio1(function(data){
+k.updateAnalogValueAio1( function(data) {
     // AIO1のアナログ値が取得できたら実行されます
     ay = data;
 });
-k.updateAnalogValueAio2(function(data){
+k.updateAnalogValueAio2( function(data) {
     // AIO2のアナログ値が取得できたら実行されます
     az = data;
     // 全軸一定周期で読み込むはずなので、z軸のときだけチェック

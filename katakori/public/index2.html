@@ -1,0 +1,58 @@
+<html>
+<head>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<div id="content">
+    <div id="first">
+        <div style="margin:50px;color:white;">D班</div>
+        <div id="konashijs_logo"></div>
+        <div id="button">
+            <span id="button_icon"></span>
+            <span>Find konashi</span>
+        </div>
+    </div>
+    <div id="connecting">
+        <div id="connecting_title">Connecting...</div>
+    </div>
+    <div id="main">
+        <div id="title">
+            <span>定姿勢経過時間</span>
+            <span id="reset" type="button" style="margin-left: 50px;" class="btn btn-primary">Reset</span>
+        </div>
+        <div id="meter"></div>
+        <div id="value">
+            <span></span>
+            <div>
+                <span id="minCnt">0</span>
+                <span>min</span>
+            </div>
+        </div>
+        <div style="position:absolute;bottom:0;margin:50px;">
+            <span id="videoButton" class="btn btn-danger">肩こり体操video</span>
+            <span id="settingBtn" class="btn btn-warning">設定</span>
+            <span id="onBtn" class="btn btn-warning">on</span>
+            <span id="offBtn" class="btn btn-warning">off</span>
+        </div>
+    </div>
+    <div id="video">
+        <span id="returnBtn" class="btn btn-danger btn-large">戻る</span>
+        <iframe class="youtube-player" type="text/html" width="320" height="200"
+                src="http://www.youtube.com/embed/3lTeBzzHX0M" frameborder="0">
+        </iframe>
+    </div>
+</div>
+
+<!-- konashi -->
+<script language="JavaScript" src="http://konashi.ux-xu.com/kjs/konashi-bridge.min.js"></script>
+
+<!-- jquery -->
+<script language="JavaScript" src="http://zeptojs.com/zepto.min.js"></script>
+<script language="JavaScript" src="https://rawgithub.com/madrobby/zepto/master/src/touch.js"></script>
+<script language="JavaScript" src="https://rawgithub.com/madrobby/zepto/master/src/fx.js"></script>
+
+
+<!-- konashijs -->
+<script src="denpa2.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</html>
