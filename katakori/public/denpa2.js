@@ -8,7 +8,7 @@
 /////////////////////////////////////
 var mode;
 var cnt;
-var min = 1;
+var min = 1; // 1min = x sec
 //
 var maxMin = 30 * min;  // 60 min 定姿勢なら 、動作開始
 

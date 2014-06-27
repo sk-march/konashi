@@ -1,6 +1,8 @@
 <html>
 <head>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="css/buttons.css">
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <div id="content">
@@ -16,23 +18,46 @@
         <div id="connecting_title">Connecting...</div>
     </div>
     <div id="main">
-        <div id="title">
-            <span>定姿勢経過時間</span>
-            <span id="reset" type="button" style="margin-left: 50px;" class="btn btn-primary">Reset</span>
+        <div id="title" style="text-align:center;width:100%;">
+
         </div>
         <div id="meter"></div>
         <div id="value">
-            <span></span>
-            <div>
+
+            <div style="position:absolute;top:120px;text-align:center;width:100%">
+                <div style="font-size:30px;">定姿勢 経過時間</div>
                 <span id="minCnt">0</span>
-                <span>min</span>
+
+                <span style="font-size:20px;">&nbsp;&nbsp;min</span>
             </div>
 
         </div>
-        <div style="position:absolute;bottom:0;margin:50px;">
+        <div id="videoButton" style="position:absolute;top:30px;right:15px;" class="button button-pill button-highlight button-large">&nbsp;肩こり体操</div>
+        <!--div style="position:absolute;bottom:0;margin:50px;">
             <span id="videoButton" class="btn btn-danger">肩こり体操video</span>
             <span id="settingBtn" class="btn btn-warning">設定</span>
+            <span id="onBtn" class="btn btn-warning">on</span>
+            <span id="offBtn" class="btn btn-warning">off</span>
+        </div-->
+        <div style="position:absolute;bottom:150px;width:100%;text-align:center;">
+            <span id="onBtn" class="button button-circle button-primary">On</span>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span id="offBtn" class="button button-circle button-caution">Off</span>
+
         </div>
+        <div style="position:absolute;bottom:60px;width:100%;">
+            <span id="reset" class="button button-block button-rounded button-action button-large">Reset</span>
+        </div>
+        <!--div class="btn-group" style="position:absolute;bottom:0">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary">On</button>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default">Off</button>
+            </div>
+        </div-->
+
     </div>
     <div id="video">
         <span id="returnBtn" class="btn btn-danger btn-large">戻る</span>
@@ -52,6 +77,6 @@
 
 
 <!-- konashijs -->
-<script src="denpa.js"></script>
+<script src="denpa2.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </html>
