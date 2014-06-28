@@ -208,6 +208,7 @@ k.ready(function () {
 //    k.i2cMode(k.KONASHI_I2C_ENABLE_400K);
 
     // set analog pin mode
+    k.pinMode(k.PIO0, k.INPUT);  // 確認用
     k.pinMode(k.PIO1, k.OUTPUT); // リレー用
     k.pinMode(k.PIO2, k.OUTPUT); // LED用
     k.pinMode(k.PIO3, k.INPUT);  // 確認用
@@ -300,7 +301,7 @@ function checkKubifuri() {
 
 // digital 確認用
 k.updatePioInput( function(data) {
-    k.digitalRead(k.PIO1, function(data) {
+    k.digitalRead(k.PIO0, function(data) {
         if(data==0){
 //            $('#minCnt').text("OFF");
         }else{
