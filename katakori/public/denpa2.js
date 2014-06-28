@@ -249,6 +249,7 @@ k.on(k.KONASHI_EVENT_CONNECTED, function () {
     timerCount();
 
 });
+
 /*
 k.on(k.KONASHI_EVENT_I2C_READ_COMPLETE, function () {
     alert("aaa");
@@ -257,6 +258,8 @@ k.completeReadI2c(function (data) {
     alert("bbb" + data);
 });
 */
+
+/*
 // yamasaki add start
 // get analog value
 var ax=0;
@@ -268,8 +271,8 @@ var vz=0;
 var lx=0;
 var ly=0;
 var lz=0;
-var gravity=980;
-var margin =50; // gravityより大きくなったら移動と判断
+var gravity=15;
+var margin =5; // gravityより大きくなったら移動と判断
 var forceMode="stay"; // or "move"
 var moveCount=0; // 2回動いたらスイッチオン
 var startTime=0; // 1回目動いた時刻
@@ -280,6 +283,7 @@ function checkKubifuri() {
         if(+new Date() > startTime + timeLimit) {
             moveCount=0;
             startTime=0;
+            mode="stay";
         }
     }
 
@@ -287,55 +291,26 @@ function checkKubifuri() {
     var norm = Math.sqrt(ax*ax + ay*ay + az*az);
     $('#accLen').text(Math.round(norm));
     if(mode=="stay") {
-        if(norm > gravity + margin) {
+        if(ax > margin || ax < -margin) {
             // 加速度が強くなったら首振りと判断
             mode="move";
             moveCount = moveCount+1;
             startTime = + new Date();
         }
     }else{
-         if(norm < gravity + margin*2/3) {
-            mode="stay";
-        }
-    }
-
-    // check
-    if(moveCount>2) {
-        switchOn();
-        moveCount=0;
-        startTime=0;
-    }
-
-/*    if(moveCount>0) {
-        if(+new Date() > startTime + timeLimit) {
-            moveCount=0;
-            startTime=0;
-        }
-    }
-
-    // calc force
-    var norm = Math.sqrt(ax*ax + ay*ay + az*az);
-    $('#accLen').text(Math.round(norm));
-    if(mode=="stay") {
-        if(norm > gravity + margin) {
+        if(ax > margin || ax < -margin) {
             // 加速度が強くなったら首振りと判断
-            mode="move";
             moveCount = moveCount+1;
-            startTime = + new Date();
         }
-    }else{
-         if(norm < gravity + margin*2/3) {
-            mode="stay";
-        }
-    }
+     }
 
     // check
     if(moveCount>2) {
         switchOn();
         moveCount=0;
         startTime=0;
+        mode="stay";
     }
-*/
 }
 
 // digital 確認用
@@ -354,26 +329,21 @@ k.updatePioInput( function(data) {
 k.updateAnalogValueAio0( function(data) {
     // AIO0のアナログ値が取得できたら実行されます
     ax = data-41;
-    vx = vx + ax;
-    lx = lx + vx;
-    $('#accX').text(vx);
+    $('#accX').text(ax);
 });
 k.updateAnalogValueAio1( function(data) {
     // AIO1のアナログ値が取得できたら実行されます
     ay = data-41;
-    vy = vy + ay;
-    ly = ly + vy;
-    $('#accY').text(vy);
+    $('#accY').text(ay);
 });
 k.updateAnalogValueAio2( function(data) {
     // AIO2のアナログ値が取得できたら実行されます
     az = data-41;
-    vz = vz + az;
-    lz = lz + vz;
-    $('#accZ').text(vz);
+    $('#accZ').text(az);
     // 全軸一定周期で読み込むはずなので、z軸のときだけチェック
     checkKubifuri();
 });
+*/
 
 // finit
 k.disconnected(function (data) {
