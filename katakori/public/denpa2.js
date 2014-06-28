@@ -50,10 +50,7 @@ $(function () {
             timerCount();
         });
     }
-    showConnecting();
-    showMeter();
 
-    timerCount();
 
     // タイマーリセット
     $('#reset').on('tap click', function () {
@@ -244,6 +241,11 @@ k.ready(function () {
 /* konashiに接続した時 */
 k.on(k.KONASHI_EVENT_CONNECTED, function () {
     showConnecting();
+
+    showMeter();
+
+    timerCount();
+
 });
 /*
 k.on(k.KONASHI_EVENT_I2C_READ_COMPLETE, function () {
