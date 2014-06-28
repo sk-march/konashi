@@ -278,6 +278,7 @@ var moveCount=0; // 2回動いたらスイッチオン
 var startTime=0; // 1回目動いた時刻
 var timeLimit=2000; // 何秒以内に首を動かすと作動するか
 function checkKubifuri() {
+   return;
      // time over
     if(moveCount>0) {
         if(+new Date() > startTime + timeLimit) {
