@@ -34,7 +34,7 @@ jQuery = Zepto;
 $(function () {
     //console.log("aaa", location.href);
     if (location.href.match('3000')) {
-        mode = 'develop';
+        //mode = 'develop';
     }
 
     $("#button").on('tap', function () {
@@ -50,6 +50,10 @@ $(function () {
             timerCount();
         });
     }
+    showConnecting();
+    showMeter();
+
+    timerCount();
 
     // タイマーリセット
     $('#reset').on('tap click', function () {
