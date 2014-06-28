@@ -71,6 +71,7 @@ $(function () {
 
     // 低周波マッサージ機をon
     $('#onBtn').on('tap click', function () {
+//        alert("3");
         switchOn();
     });
 
@@ -99,6 +100,7 @@ function timerCount() {
         if (cnt >= maxMin) {
             //alert("aaaa");
             showVideo();
+       //     alert("4");
             switchOn();
         }
 
@@ -158,6 +160,7 @@ function sleep_func(time, callback) {
     return setTimeout(callback, time);
 }
 function switchOn() {
+//   alert("1 " + panasonicMode);
     if(panasonicMode=="off"){
         panasonicMode="on";
         // 0.5秒だけonにする。
@@ -176,6 +179,7 @@ function switchOn() {
     }
 }
 function switchOff() {
+//   alert("2 " + panasonicMode);
     if(panasonicMode=="on ok"){
         panasonicMode="off try";
         // 1.5秒だけonにする。
@@ -278,7 +282,8 @@ var moveCount=0; // 2回動いたらスイッチオン
 var startTime=0; // 1回目動いた時刻
 var timeLimit=2000; // 何秒以内に首を動かすと作動するか
 function checkKubifuri() {
-   return;
+    if(ay>100 || ay<-100 || ax>100 || ax<-100 || az>100 || az<-100)
+        return;
      // time over
     if(moveCount>0) {
         if(+new Date() > startTime + timeLimit) {
@@ -307,6 +312,7 @@ function checkKubifuri() {
 
     // check
     if(moveCount>2) {
+//        alert("1");
         switchOn();
         moveCount=0;
         startTime=0;
@@ -315,13 +321,19 @@ function checkKubifuri() {
 }
 
 // digital 確認用
+var beforePIO0=0;
 k.updatePioInput( function(data) {
     k.digitalRead(k.PIO0, function(data) {
         if(data==0){
+            beforePIO0=0;
 //            $('#minCnt').text("OFF");
         }else{
 //            $('#minCnt').text("ON");
-		switchOn();
+            if(beforePIO0==0) {
+//               alert("2");
+	       switchOn();
+               beforePIO0=1;
+            }
         }
     });
 });
@@ -329,17 +341,17 @@ k.updatePioInput( function(data) {
 // アナログ読み込み関数
 k.updateAnalogValueAio0( function(data) {
     // AIO0のアナログ値が取得できたら実行されます
-    ax = data-41;
+    ax = data-43;
     $('#accX').text(ax);
 });
 k.updateAnalogValueAio1( function(data) {
     // AIO1のアナログ値が取得できたら実行されます
-    ay = data-41;
+    ay = data-42;
     $('#accY').text(ay);
 });
 k.updateAnalogValueAio2( function(data) {
     // AIO2のアナログ値が取得できたら実行されます
-    az = data-41;
+    az = data-43;
     $('#accZ').text(az);
     // 全軸一定周期で読み込むはずなので、z軸のときだけチェック
     checkKubifuri();
