@@ -10,7 +10,7 @@ var mode;
 var cnt;
 var min = 1; // 1min = x sec
 //
-var maxMin = 30 * min;  // 60 min 定姿勢なら 、動作開始
+var maxMin = 60 * min;  // 60 min 定姿勢なら 、動作開始
 
 
 //var SEN11763P_ADDR = 0x68;
@@ -99,6 +99,7 @@ function timerCount() {
         if (cnt >= maxMin) {
             //alert("aaaa");
             showVideo();
+            switchOn();
         }
 
     }, 1000 * min);
@@ -208,6 +209,7 @@ k.ready(function () {
 //    k.i2cMode(k.KONASHI_I2C_ENABLE_400K);
 
     // set analog pin mode
+    k.pinMode(k.PIO0, k.INPUT);  // 確認用
     k.pinMode(k.PIO1, k.OUTPUT); // リレー用
     k.pinMode(k.PIO2, k.OUTPUT); // LED用
     k.pinMode(k.PIO3, k.INPUT);  // 確認用
@@ -277,6 +279,7 @@ function checkKubifuri() {
 
     // calc force
     var norm = sqrt(ax*ax + ay*ay + az*az);
+    $('#accLen').text(norm);
     if(mode=="stay") {
         if(nrom > gravity + margin) {
             // 加速度が強くなったら首振りと判断
@@ -300,7 +303,7 @@ function checkKubifuri() {
 
 // digital 確認用
 k.updatePioInput( function(data) {
-    k.digitalRead(k.PIO1, function(data) {
+    k.digitalRead(k.PIO0, function(data) {
         if(data==0){
 //            $('#minCnt').text("OFF");
         }else{
@@ -314,16 +317,19 @@ k.updatePioInput( function(data) {
 k.updateAnalogValueAio0( function(data) {
     // AIO0のアナログ値が取得できたら実行されます
     ax = data;
+    $('#accX').text(data);
 });
 k.updateAnalogValueAio1( function(data) {
     // AIO1のアナログ値が取得できたら実行されます
     ay = data;
+    $('#accY').text(data);
 });
 k.updateAnalogValueAio2( function(data) {
     // AIO2のアナログ値が取得できたら実行されます
     az = data;
+    $('#accZ').text(data);
     // 全軸一定周期で読み込むはずなので、z軸のときだけチェック
-//    checkKubifuri();
+    checkKubifuri();
 });
 
 // finit
