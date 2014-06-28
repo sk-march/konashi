@@ -504,7 +504,7 @@
     showDebugLog: function(){
       var debugConsole = document.createElement("div");
       debugConsole.setAttribute("style",
-        "position:fixed;left:0px;top:0px;z-index:100000;width:200px;height:100px;" +
+        "position:fixed;left:0px;top:0px;z-index:100000;width:300px;height:200px;" +
         "background-color:rgba(0,0,0,0.6);color:#FFF;font-size:11px;overflow:hidden;"
       );
       debugConsole.setAttribute("id", "konashi-debug-console");
