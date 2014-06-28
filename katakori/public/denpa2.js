@@ -201,6 +201,8 @@ function switchOff() {
 var intervalId;
 
 k.ready(function () {
+    k.showDebugLog();
+
     showMeter();
     //k.pinModeAll(254);
 
