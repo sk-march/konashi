@@ -236,7 +236,7 @@ k.ready(function () {
         k.analogReadRequest(k.AIO0); // x軸
         k.analogReadRequest(k.AIO1); // y軸
         k.analogReadRequest(k.AIO2); // z軸
-    }, 1000);
+    }, 1);
 
 });
 
@@ -262,6 +262,12 @@ k.completeReadI2c(function (data) {
 var ax=0;
 var ay=0;
 var az=0;
+var vx=0;
+var vy=0;
+var vz=0;
+var lx=0;
+var ly=0;
+var lz=0;
 var gravity=980;
 var margin =50; // gravityより大きくなったら移動と判断
 var forceMode="stay"; // or "move"
@@ -278,17 +284,17 @@ function checkKubifuri() {
     }
 
     // calc force
-    var norm = sqrt(ax*ax + ay*ay + az*az);
-    $('#accLen').text(norm);
+    var norm = Math.sqrt(ax*ax + ay*ay + az*az);
+    $('#accLen').text(Math.round(norm));
     if(mode=="stay") {
-        if(nrom > gravity + margin) {
+        if(norm > gravity + margin) {
             // 加速度が強くなったら首振りと判断
             mode="move";
             moveCount = moveCount+1;
             startTime = + new Date();
         }
     }else{
-         if(nrom < gravity + margin*2/3) {
+         if(norm < gravity + margin*2/3) {
             mode="stay";
         }
     }
@@ -299,6 +305,37 @@ function checkKubifuri() {
         moveCount=0;
         startTime=0;
     }
+
+/*    if(moveCount>0) {
+        if(+new Date() > startTime + timeLimit) {
+            moveCount=0;
+            startTime=0;
+        }
+    }
+
+    // calc force
+    var norm = Math.sqrt(ax*ax + ay*ay + az*az);
+    $('#accLen').text(Math.round(norm));
+    if(mode=="stay") {
+        if(norm > gravity + margin) {
+            // 加速度が強くなったら首振りと判断
+            mode="move";
+            moveCount = moveCount+1;
+            startTime = + new Date();
+        }
+    }else{
+         if(norm < gravity + margin*2/3) {
+            mode="stay";
+        }
+    }
+
+    // check
+    if(moveCount>2) {
+        switchOn();
+        moveCount=0;
+        startTime=0;
+    }
+*/
 }
 
 // digital 確認用
@@ -316,18 +353,24 @@ k.updatePioInput( function(data) {
 // アナログ読み込み関数
 k.updateAnalogValueAio0( function(data) {
     // AIO0のアナログ値が取得できたら実行されます
-    ax = data;
-    $('#accX').text(data);
+    ax = data-41;
+    vx = vx + ax;
+    lx = lx + vx;
+    $('#accX').text(vx);
 });
 k.updateAnalogValueAio1( function(data) {
     // AIO1のアナログ値が取得できたら実行されます
-    ay = data;
-    $('#accY').text(data);
+    ay = data-41;
+    vy = vy + ay;
+    ly = ly + vy;
+    $('#accY').text(vy);
 });
 k.updateAnalogValueAio2( function(data) {
     // AIO2のアナログ値が取得できたら実行されます
-    az = data;
-    $('#accZ').text(data);
+    az = data-41;
+    vz = vz + az;
+    lz = lz + vz;
+    $('#accZ').text(vz);
     // 全軸一定周期で読み込むはずなので、z軸のときだけチェック
     checkKubifuri();
 });
