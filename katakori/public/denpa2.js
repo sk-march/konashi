@@ -71,6 +71,7 @@ $(function () {
 
     // 低周波マッサージ機をon
     $('#onBtn').on('tap click', function () {
+//        alert("3");
         switchOn();
     });
 
@@ -99,6 +100,7 @@ function timerCount() {
         if (cnt >= maxMin) {
             //alert("aaaa");
             showVideo();
+       //     alert("4");
             switchOn();
         }
 
@@ -158,6 +160,7 @@ function sleep_func(time, callback) {
     return setTimeout(callback, time);
 }
 function switchOn() {
+//   alert("1 " + panasonicMode);
     if(panasonicMode=="off"){
         panasonicMode="on";
         // 0.5秒だけonにする。
@@ -176,6 +179,7 @@ function switchOn() {
     }
 }
 function switchOff() {
+//   alert("2 " + panasonicMode);
     if(panasonicMode=="on ok"){
         panasonicMode="off try";
         // 1.5秒だけonにする。
@@ -251,6 +255,7 @@ k.on(k.KONASHI_EVENT_CONNECTED, function () {
     timerCount();
 
 });
+
 /*
 k.on(k.KONASHI_EVENT_I2C_READ_COMPLETE, function () {
     alert("aaa");
@@ -259,58 +264,78 @@ k.completeReadI2c(function (data) {
     alert("bbb" + data);
 });
 */
+
+
 // yamasaki add start
 // get analog value
 var ax=0;
 var ay=0;
 var az=0;
-var gravity=980;
-var margin =50; // gravityより大きくなったら移動と判断
+var vx=0;
+var vy=0;
+var vz=0;
+var lx=0;
+var ly=0;
+var lz=0;
+var gravity=15;
+var margin =5; // gravityより大きくなったら移動と判断
 var forceMode="stay"; // or "move"
 var moveCount=0; // 2回動いたらスイッチオン
 var startTime=0; // 1回目動いた時刻
 var timeLimit=2000; // 何秒以内に首を動かすと作動するか
 function checkKubifuri() {
+    if(ay>100 || ay<-100 || ax>100 || ax<-100 || az>100 || az<-100)
+        return;
      // time over
     if(moveCount>0) {
         if(+new Date() > startTime + timeLimit) {
             moveCount=0;
             startTime=0;
+            mode="stay";
         }
     }
 
     // calc force
-    var norm = sqrt(ax*ax + ay*ay + az*az);
-    $('#accLen').text(norm);
+    var norm = Math.sqrt(ax*ax + ay*ay + az*az);
+    $('#accLen').text(Math.round(norm));
     if(mode=="stay") {
-        if(nrom > gravity + margin) {
+        if(ax > margin || ax < -margin) {
             // 加速度が強くなったら首振りと判断
             mode="move";
             moveCount = moveCount+1;
             startTime = + new Date();
         }
     }else{
-         if(nrom < gravity + margin*2/3) {
-            mode="stay";
+        if(ax > margin || ax < -margin) {
+            // 加速度が強くなったら首振りと判断
+            moveCount = moveCount+1;
         }
-    }
+     }
 
     // check
     if(moveCount>2) {
+//        alert("1");
         switchOn();
         moveCount=0;
         startTime=0;
+        mode="stay";
     }
 }
 
 // digital 確認用
+var beforePIO0=0;
 k.updatePioInput( function(data) {
     k.digitalRead(k.PIO0, function(data) {
         if(data==0){
+            beforePIO0=0;
 //            $('#minCnt').text("OFF");
         }else{
 //            $('#minCnt').text("ON");
-		switchOn();
+            if(beforePIO0==0) {
+//               alert("2");
+	       switchOn();
+               beforePIO0=1;
+            }
         }
     });
 });
@@ -318,21 +343,22 @@ k.updatePioInput( function(data) {
 // アナログ読み込み関数
 k.updateAnalogValueAio0( function(data) {
     // AIO0のアナログ値が取得できたら実行されます
-    ax = data;
-    $('#accX').text(data);
+    ax = data-43;
+    $('#accX').text(ax);
 });
 k.updateAnalogValueAio1( function(data) {
     // AIO1のアナログ値が取得できたら実行されます
-    ay = data;
-    $('#accY').text(data);
+    ay = data-42;
+    $('#accY').text(ay);
 });
 k.updateAnalogValueAio2( function(data) {
     // AIO2のアナログ値が取得できたら実行されます
-    az = data;
-    $('#accZ').text(data);
+    az = data-43;
+    $('#accZ').text(az);
     // 全軸一定周期で読み込むはずなので、z軸のときだけチェック
     checkKubifuri();
 });
+
 
 // finit
 k.disconnected(function (data) {
