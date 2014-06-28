@@ -259,7 +259,7 @@ k.completeReadI2c(function (data) {
 });
 */
 
-/*
+
 // yamasaki add start
 // get analog value
 var ax=0;
@@ -343,7 +343,7 @@ k.updateAnalogValueAio2( function(data) {
     // 全軸一定周期で読み込むはずなので、z軸のときだけチェック
     checkKubifuri();
 });
-*/
+
 
 // finit
 k.disconnected(function (data) {
