@@ -8,7 +8,7 @@
 /////////////////////////////////////
 var mode;
 var cnt;
-var min = 1; // 1min = x sec
+var min = 1;
 //
 var maxMin = 30 * min;  // 60 min 定姿勢なら 、動作開始
 
@@ -34,7 +34,7 @@ jQuery = Zepto;
 $(function () {
     //console.log("aaa", location.href);
     if (location.href.match('3000')) {
-        //mode = 'develop';
+        mode = 'develop';
     }
 
     $("#button").on('tap', function () {
@@ -50,10 +50,6 @@ $(function () {
             timerCount();
         });
     }
-    showConnecting();
-    showMeter();
-
-    timerCount();
 
     // タイマーリセット
     $('#reset').on('tap click', function () {
@@ -237,7 +233,7 @@ k.ready(function () {
         k.analogReadRequest(k.AIO0); // x軸
         k.analogReadRequest(k.AIO1); // y軸
         k.analogReadRequest(k.AIO2); // z軸
-    }, 1000);
+    }, 16);
 
 });
 
@@ -300,10 +296,9 @@ function checkKubifuri() {
 k.updatePioInput( function(data) {
     k.digitalRead(k.PIO1, function(data) {
         if(data==0){
-//            $('#minCnt').text("OFF");
+            $('#minCnt').text("OFF");
         }else{
-//            $('#minCnt').text("ON");
-		switchOn();
+            $('#minCnt').text("ON");
         }
     });
 });
@@ -312,14 +307,15 @@ k.updatePioInput( function(data) {
 k.updateAnalogValueAio0( function(data) {
     // AIO0のアナログ値が取得できたら実行されます
     ax = data;
+    $('#minCnt').text("X= " + ax);
 });
 k.updateAnalogValueAio1( function(data) {
     // AIO1のアナログ値が取得できたら実行されます
-    ay = data;
+    ay = data.value;
 });
 k.updateAnalogValueAio2( function(data) {
     // AIO2のアナログ値が取得できたら実行されます
-    az = data;
+    az = data.value;
     // 全軸一定周期で読み込むはずなので、z軸のときだけチェック
 //    checkKubifuri();
 });
