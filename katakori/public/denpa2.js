@@ -240,7 +240,7 @@ k.ready(function () {
         k.analogReadRequest(k.AIO0); // x軸
         k.analogReadRequest(k.AIO1); // y軸
         k.analogReadRequest(k.AIO2); // z軸
-    }, 1000);
+    }, 500);
 
 });
 
